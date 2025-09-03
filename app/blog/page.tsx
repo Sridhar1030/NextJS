@@ -29,7 +29,7 @@ export default function BlogPage() {
 					.find();
 
 				// ✅ result[0] contains entries
-				const entries = result?.[0] || [];
+				const entries = result.entries || [];
 
 				const blogEntries: BlogPost[] = entries
 					.filter(
