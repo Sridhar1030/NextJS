@@ -1,6 +1,7 @@
 import type { Metadata } from "next"; // Importing the Metadata type from Next.js
 import "./globals.css"; // Importing global CSS styles
 import Footer from "./components/Footer"; // Importing the Footer component
+import Link from "next/link"; // Importing Next.js Link component
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,6 +18,32 @@ export default function RootLayout({
     <html lang="en">
       {/* Setting the language attribute for the HTML document */}
       <body className="flex flex-col min-h-screen">
+        <header className="bg-white shadow-sm border-b">
+          <nav className="max-w-7xl mx-auto px-4 py-4">
+            <div className="flex justify-between items-center">
+              <Link href="/" className="text-xl font-bold text-gray-800 hover:text-gray-600">
+                Your App
+              </Link>
+              <div className="space-x-6">
+                <Link href="/" className="text-gray-600 hover:text-gray-800">
+                  Home
+                </Link>
+                <Link href="/blog" className="text-gray-600 hover:text-gray-800">
+                  Blog
+                </Link>
+                <Link href="/about" className="text-gray-600 hover:text-gray-800">
+                  About
+                </Link>
+                <Link href="/help" className="text-gray-600 hover:text-gray-800">
+                  Help
+                </Link>
+                <Link href="/test" className="text-gray-600 hover:text-gray-800">
+                  Test
+                </Link>
+              </div>
+            </div>
+          </nav>
+        </header>
         <div className="flex-1">
           {children}
         </div>
