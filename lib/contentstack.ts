@@ -7,13 +7,25 @@ import ContentstackLivePreview, { IStackSdk } from "@contentstack/live-preview-u
 // Importing the Page type definition 
 import { Page } from "./types";
 
-// helper functions from private package to retrieve Contentstack endpoints in a convienient way
+// helper functions from private package to retriev e Contentstack endpoints in a convienient way
 import { getContentstackEndpoints, getRegionForString } from "@timbenniks/contentstack-endpoints";
+
+// Debugging function to log environment variables
+function logEnvironmentConfig() {
+  console.log('Contentstack Environment Configuration:');
+  console.log('API Key:', process.env.NEXT_PUBLIC_CONTENTSTACK_API_KEY);
+  console.log('Environment:', process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT);
+  console.log('Region:', process.env.NEXT_PUBLIC_CONTENTSTACK_REGION);
+  console.log('Preview Enabled:', process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW);
+}
 
 // Set the region by string value from environment variables
 const region = getRegionForString(process.env.NEXT_PUBLIC_CONTENTSTACK_REGION as string)
 // object with all endpoints for region.
 const endpoints = getContentstackEndpoints(region, true)
+
+// Log environment configuration on initialization
+logEnvironmentConfig();
 
 export const stack = contentstack.stack({
   // Setting the API key from environment variables
@@ -69,8 +81,12 @@ export function initLivePreview() {
     },
   });
 }
+
 // Function to fetch page data based on the URL
 export async function getPage(url: string) {
+  console.log(`Fetching page with URL: ${url}`);
+  console.log(`Current environment: ${process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT}`);
+
   const result = await stack
     .contentType("page") // Specifying the content type as "page"
     .entry() // Accessing the entry
@@ -78,8 +94,10 @@ export async function getPage(url: string) {
     .where("url", QueryOperation.EQUALS, url) // Filtering entries by URL
     .find<Page>(); // Executing the query and expecting a result of type Page
 
+  console.log('Fetch result:', result);
+
   if (result.entries) {
-    const entry = result.entries[0]; // Getting the first entry from the result
+    const entry = result.entries[0] || null; // Getting the first entry from the result
 
     if (process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW === 'true') {
       contentstack.Utils.addEditableTags(entry, 'page', true); // Adding editable tags for live preview if enabled
@@ -87,4 +105,6 @@ export async function getPage(url: string) {
 
     return entry; // Returning the fetched entry
   }
+
+  return null;
 }
