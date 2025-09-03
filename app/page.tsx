@@ -21,8 +21,7 @@ import ContentstackLivePreview, {
  * It initializes live preview functionality and listens for entry changes to update the content.
  */
 export default function Home() {
-  const [page, setPage] = useState<Page>(); // Declaring a state variable 'page' with its setter 'setPage', initially undefined
-
+  const [page, setPage] = useState<Page | null>(null);
   const getContent = async () => {
     const page = await getPage("/"); // Asynchronously fetching page data for the root URL
     setPage(page); // Updating the state with the fetched page data
